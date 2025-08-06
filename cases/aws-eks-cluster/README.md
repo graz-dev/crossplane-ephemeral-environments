@@ -61,7 +61,7 @@ First, we need to set up our local environment with all the necessary tools. We'
     ```
 
     You should see a similar output:
-    
+
     ```console
     NAME                 STATUS   AGE
     default              Active   4m52s
@@ -79,35 +79,28 @@ With our local cluster ready, it's time to install the core components: Crosspla
 
 1.  **Add Crossplane Helm Repository**
     First, we add the official Helm chart repository for Crossplane.
-    <details>
-    <summary>Add Helm Repo</summary>
 
     ```bash
     helm repo add crossplane-stable https://charts.crossplane.io/stable
     helm repo update
     ```
-    </details>
 
 2.  **Install Crossplane**
     Now, we install Crossplane into its own namespace, `crossplane-system`.
-    <details>
-    <summary>Install Crossplane</summary>
 
     ```bash
     helm install crossplane --namespace crossplane-system --create-namespace crossplane-stable/crossplane
     ```
-    </details>
 
 3.  **Verify Crossplane Installation**
     Let's make sure the Crossplane pods are running correctly.
-    <details>
-    <summary>Check Crossplane Pods</summary>
 
     ```bash
     kubectl get pods -n crossplane-system
     ```
-    </details>
+
     The output should look like this (pod names may vary):
+
     ```console
     NAME                                       READY   STATUS    RESTARTS   AGE
     crossplane-67b976bbf4-hn9kk                1/1     Running   0          81s
@@ -116,34 +109,27 @@ With our local cluster ready, it's time to install the core components: Crosspla
 
 4.  **Install Cert-Manager**
     Cert-manager is a dependency for kube-green. It's used to manage certificates for webhooks.
-    <details>
-    <summary>Install Cert-Manager</summary>
 
     ```bash
     kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.14.5/cert-manager.yaml
     ```
-    </details>
 
 5.  **Install kube-green**
     Finally, we install kube-green, which will manage the sleep schedule for our cluster.
-    <details>
-    <summary>Install kube-green</summary>
 
     ```bash
     kubectl apply -f https://github.com/kube-green/kube-green/releases/latest/download/kube-green.yaml
     ```
-    </details>
 
 6.  **Verify kube-green Installation**
     Check that the kube-green controller is running.
-    <details>
-    <summary>Check kube-green Pods</summary>
 
     ```bash
     kubectl get pods -n kube-green
     ```
-    </details>
+    
     You should see a running pod:
+    
     ```console
     NAME                                             READY   STATUS    RESTARTS   AGE
     kube-green-controller-manager-6c677846bb-vxs64   1/1     Running   0          85s
