@@ -144,7 +144,7 @@ Crossplane uses **Providers** to interact with external APIs like AWS. We need t
 1.  **Install the AWS EKS Provider**
     This provider manages EKS resources.
     <details>
-    <summary><code>provider-aws-eks.yaml</code></summary>
+    <summary><code>[provider-aws-eks.yaml](manifests/providers/provider-aws-eks.yaml)</code></summary>
 
     ```yaml
     # provider-aws-eks.yaml
@@ -164,7 +164,7 @@ Crossplane uses **Providers** to interact with external APIs like AWS. We need t
 2.  **Install the AWS EC2 Provider**
     This provider manages networking resources like VPCs and Subnets.
     <details>
-    <summary><code>provider-aws-ec2.yaml</code></summary>
+    <summary><code>[provider-aws-ec2.yaml](manifests/providers/provider-aws-ec2.yaml)</code></summary>
 
     ```yaml
     # provider-aws-ec2.yaml
