@@ -1234,7 +1234,7 @@ Now that we have defined our custom `KubernetesCluster` API, let's use it to pro
     ```
 
     You should see the three nodes you requested:
-    
+
     ```console
     NAME                                          STATUS   ROLES    AGE     VERSION
     ip-10-0-0-23.eu-central-1.compute.internal    Ready    <none>   9m19s   v1.33.0-eks-802817d
@@ -1278,13 +1278,10 @@ Now, let's configure kube-green to automatically scale down our cluster's node p
       namespace: kube-green
     ```
     </details>
-    <details>
-    <summary>Apply the RBAC rules</summary>
-
+    
     ```bash
     kubectl apply -f kube-green-kubernetescluster.yaml
     ```
-    </details>
 
 2.  **Create a SleepInfo Resource**
     The `SleepInfo` resource tells kube-green when to sleep and wake up, and what to patch. In this case, we patch the `nodes.count` parameter of our `KubernetesCluster` to scale it down.
@@ -1313,24 +1310,20 @@ Now, let's configure kube-green to automatically scale down our cluster's node p
             value: 1
     ```
     </details>
-    <details>
-    <summary>Apply the SleepInfo</summary>
-
+    
     ```bash
     kubectl apply -f sleepinfo.yaml
     ```
-    </details>
 
 3.  **Verify Hibernation (Sleep)**
     At the `sleepAt` time, kube-green will patch our `KubernetesCluster` resource, and Crossplane will scale down the EKS node group. This can take a few minutes.
-    <details>
-    <summary>Check Nodes After Sleep</summary>
-
+    
     ```bash
     KUBECONFIG=ekskubeconfig kubectl get nodes
     ```
-    </details>
+    
     You should see the node count decrease to 1:
+
     ```console
     NAME                                         STATUS   ROLES    AGE   VERSION
     ip-10-0-2-96.eu-central-1.compute.internal   Ready    <none>   14m   v1.33.3-eks-3abbec1
@@ -1339,14 +1332,13 @@ Now, let's configure kube-green to automatically scale down our cluster's node p
 
 4.  **Verify Hibernation (Wake Up)**
     At the `wakeUpAt` time, kube-green will revert the patch, and Crossplane will scale the node group back up to its original count.
-    <details>
-    <summary>Check Nodes After Wake Up</summary>
 
     ```bash
     KUBECONFIG=ekskubeconfig kubectl get nodes
     ```
-    </details>
+    
     You should see the node count return to 3:
+    
     ```console
     NAME                                          STATUS   ROLES    AGE     VERSION
     ip-10-0-0-23.eu-central-1.compute.internal    Ready    <none>   9m19s   v1.33.0-eks-802817d

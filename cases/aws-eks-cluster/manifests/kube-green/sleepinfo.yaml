@@ -1,0 +1,18 @@
+apiVersion: kube-green.com/v1alpha1
+kind: SleepInfo
+metadata:
+  name: sleep-schedule-for-kubernetescluster
+  namespace: default
+spec:
+  weekdays: "*"
+  timeZone: "Europe/Rome"
+  sleepAt: "21:58"
+  wakeUpAt: "22:10"
+  patches:
+  - target:
+      group: k8s.crossplane.grazdev.io
+      kind: KubernetesCluster
+    patch: |
+      - op: replace
+        path: /spec/parameters/nodes/count
+        value: 1
