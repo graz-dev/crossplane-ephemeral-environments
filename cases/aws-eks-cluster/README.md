@@ -21,58 +21,47 @@ First, we need to set up our local environment with all the necessary tools. We'
 
 1.  **Install Kind**
     [Kind](https://kind.sigs.k8s.io/) lets you run local Kubernetes clusters using Docker container "nodes". It's perfect for development and testing. If you're on macOS and use Homebrew, you can run:
-    <details>
-    <summary>Install Kind</summary>
 
     ```bash
     brew install kind
     ```
-    </details>
 
     *For other installation options, please refer to the [official Kind documentation](https://kind.sigs.k8s.io/docs/user/quick-start/#installing-with-a-package-manager).*
 
 2.  **Install Helm**
     [Helm](https://helm.sh/) is the package manager for Kubernetes, which helps you manage complex applications. We'll use it to install Crossplane.
-    <details>
-    <summary>Install Helm</summary>
 
     ```bash
     brew install helm
     ```
-    </details>
-    *(For other installation options, see the [Helm installation guide](https://helm.sh/docs/intro/install/).)*
+
+    *For other installation options, see the [Helm installation guide](https://helm.sh/docs/intro/install/).*
 
 3.  **Install kubectl**
     `kubectl` is the command-line tool for interacting with Kubernetes clusters.
-    <details>
-    <summary>Install kubectl</summary>
 
     ```bash
     brew install kubectl
     ```
-    </details>
+    
     *For other installation options, see the [kubectl installation guide](https://kubernetes.io/docs/tasks/tools/install-kubectl-macos/).*
 
 4.  **Create a Local Cluster**
     Now, let's create our control plane cluster using Kind.
-    <details>
-    <summary>Create Kind Cluster</summary>
 
     ```bash
     kind create cluster --name ephemeral-environments-demo
     ```
-    </details>
 
 5.  **Verify the Cluster**
     Check that your local cluster is up and running.
-    <details>
-    <summary>Check Namespaces</summary>
 
     ```bash
     kubectl get ns
     ```
-    </details>
+
     You should see a similar output:
+    
     ```console
     NAME                 STATUS   AGE
     default              Active   4m52s
