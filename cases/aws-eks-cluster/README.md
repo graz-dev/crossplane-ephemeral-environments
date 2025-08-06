@@ -1203,24 +1203,20 @@ Now that we have defined our custom `KubernetesCluster` API, let's use it to pro
         name: eks-cluster-kubeconfig
     ```
     </details>
-    <details>
-    <summary>Apply the Claim</summary>
-
+    
     ```bash
     kubectl apply -f claim-kubernetescluster.yaml
     ```
-    </details>
 
 2.  **Monitor Provisioning**
     Provisioning an EKS cluster can take around 20 minutes. You can monitor the status with the following command:
-    <details>
-    <summary>Check Cluster Status</summary>
-
+    
     ```bash
     kubectl get kubernetescluster
     ```
-    </details>
+    
     Wait until `SYNCED` and `READY` are both `True`.
+
     ```console
     NAME                SYNCED   READY   CONNECTION-SECRET        AGE
     deploy-target-eks   True     True    eks-cluster-kubeconfig   59m
@@ -1228,9 +1224,7 @@ Now that we have defined our custom `KubernetesCluster` API, let's use it to pro
 
 3.  **Access the New EKS Cluster**
     Once ready, Crossplane creates a secret containing the `kubeconfig` for the new cluster. Let's extract it and verify access.
-    <details>
-    <summary>Get Kubeconfig and Verify Nodes</summary>
-
+    
     ```bash
     # Extract the kubeconfig
     kubectl get secret eks-cluster-kubeconfig -o jsonpath='{.data.kubeconfig}' | base64 --decode > ekskubeconfig
@@ -1238,8 +1232,9 @@ Now that we have defined our custom `KubernetesCluster` API, let's use it to pro
     # Use the kubeconfig to get the nodes of the new cluster
     KUBECONFIG=ekskubeconfig kubectl get nodes
     ```
-    </details>
+
     You should see the three nodes you requested:
+    
     ```console
     NAME                                          STATUS   ROLES    AGE     VERSION
     ip-10-0-0-23.eu-central-1.compute.internal    Ready    <none>   9m19s   v1.33.0-eks-802817d

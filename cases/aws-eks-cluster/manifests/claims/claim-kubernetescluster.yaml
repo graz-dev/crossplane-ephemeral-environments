@@ -1,0 +1,16 @@
+# claim-kubernetescluster.yaml
+apiVersion: k8s.crossplane.grazdev.io/v1alpha1
+kind: KubernetesCluster
+metadata:
+  namespace: default
+  name: deploy-target-eks
+spec:
+  id: deploy-target-eks
+  parameters:
+    region: eu-central-1
+    nodes:
+      count: 3
+  # Crossplane creates the secret object in the same namespace as the Claim
+  # see https://docs.crossplane.io/latest/concepts/claims/#claim-connection-secrets
+  writeConnectionSecretToRef:
+    name: eks-cluster-kubeconfig
