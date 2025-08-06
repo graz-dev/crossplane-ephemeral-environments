@@ -151,9 +151,9 @@ Crossplane uses **Providers** to interact with external APIs like AWS. We need t
     apiVersion: pkg.crossplane.io/v1
     kind: Provider
     metadata:
-      name: provider-aws-eks
+        name: provider-aws-eks
     spec:
-      package: xpkg.upbound.io/upbound/provider-aws-eks:v1.2.1
+        package: xpkg.upbound.io/upbound/provider-aws-eks:v1.2.1
     ```
     </details>
     <details>
@@ -174,9 +174,9 @@ Crossplane uses **Providers** to interact with external APIs like AWS. We need t
     apiVersion: pkg.crossplane.io/v1
     kind: Provider
     metadata:
-      name: provider-aws-ec2
+        name: provider-aws-ec2
     spec:
-      package: xpkg.upbound.io/upbound/provider-aws-ec2:v1.2.1
+        package: xpkg.upbound.io/upbound/provider-aws-ec2:v1.2.1
     ```
     </details>
     <details>
@@ -197,9 +197,9 @@ Crossplane uses **Providers** to interact with external APIs like AWS. We need t
     apiVersion: pkg.crossplane.io/v1
     kind: Provider
     metadata:
-      name: provider-aws-iam
+        name: provider-aws-iam
     spec:
-      package: xpkg.upbound.io/upbound/provider-aws-iam:v1.2.1
+        package: xpkg.upbound.io/upbound/provider-aws-iam:v1.2.1
     ```
     </details>
     <details>
@@ -212,14 +212,13 @@ Crossplane uses **Providers** to interact with external APIs like AWS. We need t
 
 4.  **Verify Provider Installation**
     Check that all providers are installed and healthy.
-    <details>
-    <summary>Check Providers</summary>
 
     ```bash
     kubectl get providers.pkg.crossplane.io
     ```
-    </details>
+
     The output should show all providers as `INSTALLED` and `HEALTHY`.
+
     ```console
     NAME                          INSTALLED   HEALTHY   PACKAGE                                               AGE
     provider-aws-ec2              True        True      xpkg.upbound.io/upbound/provider-aws-ec2:v1.2.1       3m3s
@@ -229,23 +228,18 @@ Crossplane uses **Providers** to interact with external APIs like AWS. We need t
 
 5.  **Configure AWS Credentials**
     Crossplane needs AWS credentials to create resources on your behalf. Create a file named `aws-credentials.txt` with your credentials.
-    <details>
-    <summary><code>aws-credentials.txt</code></summary>
 
     ```ini
     [default]
     aws_access_key_id = <your-access-key-id>
     aws_secret_access_key = <your-secret-access-key>
     ```
-    </details>
+    
     Now, create a Kubernetes secret from this file.
-    <details>
-    <summary>Create Secret</summary>
 
     ```bash
     kubectl create secret generic aws-secret -n crossplane-system --from-file=creds=./aws-credentials.txt
     ```
-    </details>
 
 6.  **Create a ProviderConfig**
     The `ProviderConfig` tells the AWS providers how to authenticate. It references the secret we just created.
@@ -257,23 +251,20 @@ Crossplane uses **Providers** to interact with external APIs like AWS. We need t
     apiVersion: aws.upbound.io/v1beta1
     kind: ProviderConfig
     metadata:
-      name: default
+        name: default
     spec:
-      credentials:
+        credentials:
         source: Secret
         secretRef:
-          namespace: crossplane-system
-          name: aws-secret
-          key: creds
+            namespace: crossplane-system
+            name: aws-secret
+            key: creds
     ```
     </details>
-    <details>
-    <summary>Apply the manifest</summary>
 
     ```bash
     kubectl apply -f provider-aws-config.yaml
     ```
-    </details>
 
 ---
 
