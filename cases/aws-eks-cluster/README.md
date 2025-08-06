@@ -329,14 +329,11 @@ We will create two levels of abstraction:
                         type: string
     ```
     </details>
-    <details>
-    <summary>Apply the XRD</summary>
-
+    
     ```bash
     kubectl apply -f xrd-networking.yaml
     ```
-    </details>
-
+    
 2.  **Create the Networking Composition (`composition-networking.yaml`)**
     This Composition implements the `XNetworking` API by defining all the underlying AWS resources (VPC, Subnets, Internet Gateway, etc.). For more details on how this works, see the [Crossplane Composition documentation](https://docs.crossplane.io/latest/concepts/composition/).
     <details>
@@ -694,14 +691,11 @@ We will create two levels of abstraction:
                     fmt: "%sc"
     ```
     </details>
-    <details>
-    <summary>Apply the Composition</summary>
-
+    
     ```bash
     kubectl apply -f composition-networking.yaml
     ```
-    </details>
-
+    
 ### Step 4.2: The EKS Cluster Layer
 
 1.  **Create the EKS Cluster XRD (`xrd-ekscluster.yaml`)**
@@ -781,13 +775,10 @@ We will create two levels of abstraction:
                     type: string
     ```
     </details>
-    <details>
-    <summary>Apply the XRD</summary>
 
     ```bash
     kubectl apply -f xrd-ekscluster.yaml
     ```
-    </details>
 
 2.  **Create the EKS Cluster Composition (`composition-ekscluster.yaml`)**
     This Composition creates the EKS control plane, node groups, and associated IAM roles. It gets the network details from the `XNetworking` resource we defined earlier.
@@ -1021,14 +1012,11 @@ We will create two levels of abstraction:
                     role: nodegroup
     ```
     </details>
-    <details>
-    <summary>Apply the Composition</summary>
-
+    
     ```bash
     kubectl apply -f composition-ekscluster.yaml
     ```
-    </details>
-
+    
 ### Step 4.3: The Top-Level Kubernetes Cluster Abstraction
 
 Now we create the final, user-facing abstraction that combines networking and the EKS cluster into one simple API.
@@ -1102,14 +1090,11 @@ Now we create the final, user-facing abstraction that combines networking and th
                       type: string
     ```
     </details>
-    <details>
-    <summary>Apply the XRD</summary>
-
+    
     ```bash
     kubectl apply -f xrd-kubernetescluster.yaml
     ```
-    </details>
-
+    
 2.  **Create the Top-Level Composition (`composition-kubernetescluster.yaml`)**
     This Composition nests the `XNetworking` and `XEKSCluster` resources, creating the entire stack from a single user request.
     <details>
@@ -1185,13 +1170,10 @@ Now we create the final, user-facing abstraction that combines networking and th
                 fromFieldPath: Required
     ```
     </details>
-    <details>
-    <summary>Apply the Composition</summary>
 
     ```bash
     kubectl apply -f composition-kubernetescluster.yaml
     ```
-    </details>
 
 ---
 
