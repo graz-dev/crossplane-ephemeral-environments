@@ -1,0 +1,49 @@
+apiVersion: kube-green.com/v1alpha1
+kind: SleepInfo
+metadata:
+  name: lock-s3-bucket
+spec:
+  weekdays: "*"
+  timeZone: "Europe/Rome"
+  sleepAt: "19:05"
+  wakeUpAt: "19:07"
+  patches:
+  - target:
+      group: platform.example.org
+      kind: SecureBucket
+    patch: |
+      - op: replace
+        path: /spec/parameters/policy
+        value: |
+          {
+            "Version": "2012-10-17",
+            "Statement": [
+              {
+                "Sid": "AllowAdminAccess",
+                "Effect": "Allow",
+                "Principal": {
+                  "AWS": "arn:aws:iam::<your-account-id>:user/<your-user>"
+                },
+                "Action": "s3:*",
+                "Resource": [
+                  "arn:aws:s3:::my-final-bucket-for-production-2025",
+                  "arn:aws:s3:::my-final-bucket-for-production-2025/*"
+                ]
+              },
+              {
+                "Sid": "DenyEveryoneElse",
+                "Effect": "Deny",
+                "Principal": "*",
+                "Action": "s3:*",
+                "Resource": [
+                  "arn:aws:s3:::my-final-bucket-for-production-2025",
+                  "arn:aws:s3:::my-final-bucket-for-production-2025/*"
+                ],
+                "Condition": {
+                  "StringNotLike": {
+                    "aws:PrincipalArn": "arn:aws:iam::<your-account-id>:user/<your-user>"
+                  }
+                }
+              }
+            ]
+          }

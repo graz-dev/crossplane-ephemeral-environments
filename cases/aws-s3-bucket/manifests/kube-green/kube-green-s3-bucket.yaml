@@ -1,0 +1,21 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: kube-green-s3-patcher
+rules:
+- apiGroups: ["platform.example.org"]
+  resources: ["securebuckets"]
+  verbs: ["get", "list", "watch", "patch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: kube-green-s3-patcher-binding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: kube-green-s3-patcher
+subjects:
+- kind: ServiceAccount
+  name: kube-green-controller-manager 
+  namespace: kube-green

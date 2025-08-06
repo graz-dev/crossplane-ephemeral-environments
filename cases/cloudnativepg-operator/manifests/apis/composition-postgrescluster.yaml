@@ -1,0 +1,41 @@
+# composition-postgrescluster.yaml
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  name: postgrescluster.demo.crossplane.io
+spec:
+  compositeTypeRef:
+    apiVersion: demo.crossplane.io/v1alpha1
+    kind: XPostgresCluster
+  resources:
+  - name: postgres-cluster-object
+    base:
+      apiVersion: kubernetes.crossplane.io/v1alpha2
+      kind: Object
+      spec:
+        managementPolicies: ["*"]
+        forProvider:
+          manifest:
+            apiVersion: postgresql.cnpg.io/v1
+            kind: Cluster
+            metadata:
+              namespace: default
+            spec:
+              storage:
+                size: 1Gi
+              bootstrap:
+                initdb:
+                  database: appdb
+                  owner: appuser
+        providerConfigRef:
+          name: kubernetes-in-cluster
+    patches:
+    - fromFieldPath: "metadata.name"
+      toFieldPath: "spec.forProvider.manifest.metadata.name"
+    - fromFieldPath: "spec.instances"
+      toFieldPath: "spec.forProvider.manifest.spec.instances"
+    - type: FromCompositeFieldPath
+      fromFieldPath: spec.hibernation
+      toFieldPath: spec.forProvider.manifest.metadata.annotations[cnpg.io/hibernation]
+      policy:
+        fromFieldPath: Optional

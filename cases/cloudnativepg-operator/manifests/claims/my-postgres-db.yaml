@@ -1,0 +1,9 @@
+# my-postgres-db.yaml
+apiVersion: demo.crossplane.io/v1alpha1
+kind: XPostgresCluster
+metadata:
+  name: my-production-db
+  namespace: default
+spec:
+  instances: 1
+  hibernation: "off"

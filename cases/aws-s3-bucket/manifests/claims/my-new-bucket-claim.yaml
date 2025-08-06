@@ -1,0 +1,30 @@
+apiVersion: platform.example.org/v1alpha1
+kind: SecureBucket
+metadata:
+  name: my-final-bucket-for-production
+spec:
+  compositionSelector:
+    matchLabels:
+      type: secure-s3-from-manifests
+  parameters:
+    bucketName: "my-final-bucket-for-production-2025"
+    region: "us-east-2"
+    blockPublicPolicy: false
+    policy: |
+      {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Sid": "AllowAdminAccess",
+            "Effect": "Allow",
+            "Principal": {
+              "AWS": "arn:aws:iam::<your-account-id>:user/<your-user>"
+            },
+            "Action": "s3:*",
+            "Resource": [
+              "arn:aws:s3:::my-final-bucket-for-production-2025",
+              "arn:aws:s3:::my-final-bucket-for-production-2025/*"
+            ]
+          }
+        ]
+      }

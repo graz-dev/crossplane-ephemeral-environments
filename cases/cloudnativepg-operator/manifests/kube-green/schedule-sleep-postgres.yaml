@@ -1,0 +1,19 @@
+# schedule-sleep-postgres.yaml
+apiVersion: kube-green.com/v1alpha1
+kind: SleepInfo
+metadata:
+  name: sleep-schedule-for-postgres
+  namespace: default
+spec:
+  weekdays: "*"
+  timeZone: "Europe/Rome"
+  sleepAt: "18:47"
+  wakeUpAt: "18:49"
+  patches:
+  - target:
+      group: demo.crossplane.io
+      kind: XPostgresCluster
+    patch: |
+      - op: replace
+        path: /spec/hibernation
+        value: "on"

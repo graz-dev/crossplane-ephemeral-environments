@@ -1,0 +1,43 @@
+apiVersion: apiextensions.crossplane.io/v1
+kind: CompositeResourceDefinition
+metadata:
+  name: xsecurebuckets.platform.example.org
+spec:
+  group: platform.example.org
+  names:
+    kind: XSecureBucket
+    plural: xsecurebuckets
+  claimNames:
+    kind: SecureBucket
+    plural: securebuckets
+  versions:
+  - name: v1alpha1
+    served: true
+    referenceable: true
+    schema:
+      openAPIV3Schema:
+        type: object
+        properties:
+          spec:
+            type: object
+            properties:
+              parameters:
+                type: object
+                properties:
+                  bucketName:
+                    description: "Bucket name."
+                    type: string
+                  region:
+                    description: "Bucket region."
+                    type: string
+                  policy:
+                    description: "Bucket policy in JSON format."
+                    type: string
+                  blockPublicPolicy:
+                    description: "Block public access policy."
+                    type: boolean
+                    default: true
+                required:
+                - bucketName
+                - region
+                - policy

@@ -1,0 +1,31 @@
+# xrd-postgrescluster.yaml
+apiVersion: apiextensions.crossplane.io/v1
+kind: CompositeResourceDefinition
+metadata:
+  name: xpostgresclusters.demo.crossplane.io
+spec:
+  group: demo.crossplane.io
+  names:
+    kind: XPostgresCluster
+    plural: xpostgresclusters
+  versions:
+  - name: v1alpha1
+    served: true
+    referenceable: true
+    schema:
+      openAPIV3Schema:
+        type: object
+        properties:
+          spec:
+            type: object
+            properties:
+              instances:
+                type: integer
+                description: "Number of PostgreSQL instances in the cluster."
+                default: 1
+              hibernation:
+                type: string
+                description: "Set to 'on' to hibernate the cluster, 'off' to wake it up."
+                default: "off"
+            required:
+            - instances
