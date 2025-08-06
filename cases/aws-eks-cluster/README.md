@@ -156,13 +156,10 @@ Crossplane uses **Providers** to interact with external APIs like AWS. We need t
         package: xpkg.upbound.io/upbound/provider-aws-eks:v1.2.1
     ```
     </details>
-    <details>
-    <summary>Apply the manifest</summary>
 
     ```bash
     kubectl apply -f provider-aws-eks.yaml
     ```
-    </details>
 
 2.  **Install the AWS EC2 Provider**
     This provider manages networking resources like VPCs and Subnets.
@@ -179,13 +176,10 @@ Crossplane uses **Providers** to interact with external APIs like AWS. We need t
         package: xpkg.upbound.io/upbound/provider-aws-ec2:v1.2.1
     ```
     </details>
-    <details>
-    <summary>Apply the manifest</summary>
 
     ```bash
     kubectl apply -f provider-aws-ec2.yaml
     ```
-    </details>
 
 3.  **Install the AWS IAM Provider**
     This provider manages IAM roles and policies required by the EKS cluster.
@@ -202,14 +196,11 @@ Crossplane uses **Providers** to interact with external APIs like AWS. We need t
         package: xpkg.upbound.io/upbound/provider-aws-iam:v1.2.1
     ```
     </details>
-    <details>
-    <summary>Apply the manifest</summary>
-
+    
     ```bash
     kubectl apply -f provider-aws-iam.yaml
     ```
-    </details>
-
+    
 4.  **Verify Provider Installation**
     Check that all providers are installed and healthy.
 
