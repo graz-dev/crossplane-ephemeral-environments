@@ -1347,3 +1347,33 @@ Now, let's configure kube-green to automatically scale down our cluster's node p
     ```
 
 Congratulations! You have successfully created a self-service, ephemeral EKS cluster with scheduled hibernation.
+
+---
+
+## Considerations: Cost Savings
+
+This approach of ephemeral environments with scheduled hibernation can lead to significant cost savings, especially for non-production environments like development, testing, or staging.
+
+Let's break down the potential savings with a simple scenario:
+
+-   **Scenario:** A development team needs a 3-node EKS cluster during their working hours (e.g., 10 hours a day, 5 days a week).
+-   **Without Hibernation:** The cluster would run with 3 nodes continuously.
+    -   `3 nodes * 24 hours/day * 5 days/week = 360 node-hours per week`
+    -   `360 node-hours * $0.0441/hour = $15.88 per week`
+-   **With Hibernation (via kube-green):** The cluster scales down to 1 node during off-hours (14 hours a day on weekdays, and the entire weekend).
+    -   Active hours: `3 nodes * 10 hours/day * 5 days/week = 150 node-hours`
+    -   Inactive hours (weekdays): `1 node * 14 hours/day * 5 days/week = 70 node-hours`
+    -   Inactive hours (weekend): `1 node * 24 hours/day * 2 days/week = 48 node-hours`
+    -   Total with kube-green: `150 + 70 + 48 = 268 node-hours per week`
+    -   `268 node-hours * $0.0441/hour = $11.82 per week`
+
+### Estimated Savings
+
+-   **Weekly Cost Savings:** `$15.88 - $11.82 = $4.06 per week`
+-   **Percentage Savings:** By scaling down the cluster when it's not in use, you could achieve approximately **25.5%** in cost savings for the EKS nodes.
+
+This simple example demonstrates the power of combining Crossplane's infrastructure management with kube-green's lifecycle automation to create cost-effective, on-demand environments.
+
+**Disclaimer:** For this tutorial, we are using `t3.small` instances to be compatible with the AWS Free Tier. The cost savings calculations above are based on the `t3.medium` instance type, which is a more realistic choice for small production workloads.
+
+*AWS instance costs may vary; the prices shown are for example purposes only.*
