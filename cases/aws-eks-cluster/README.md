@@ -141,10 +141,10 @@ With our local cluster ready, it's time to install the core components: Crosspla
 
 Crossplane uses **Providers** to interact with external APIs like AWS. We need to install and configure the specific providers for EKS, EC2, and IAM.
 
-1.  **Install the AWS EKS Provider**
-    This provider manages EKS resources.
+1.  **Install the AWS EKS Provider **
+    This provider manages EKS resources. You can find it here: [provider-aws-eks.yaml](manifests/providers/provider-aws-eks.yaml)
     <details>
-    <summary><code>[provider-aws-eks.yaml](manifests/providers/provider-aws-eks.yaml)</code></summary>
+    <summary><code>provider-aws-eks.yaml</code></summary>
 
     ```yaml
     # provider-aws-eks.yaml
@@ -162,9 +162,9 @@ Crossplane uses **Providers** to interact with external APIs like AWS. We need t
     ```
 
 2.  **Install the AWS EC2 Provider**
-    This provider manages networking resources like VPCs and Subnets.
+    This provider manages networking resources like VPCs and Subnets. You can find it here: [provider-aws-ec2.yaml](manifests/providers/provider-aws-ec2.yaml)
     <details>
-    <summary><code>[provider-aws-ec2.yaml](manifests/providers/provider-aws-ec2.yaml)</code></summary>
+    <summary><code>provider-aws-ec2.yaml</code></summary>
 
     ```yaml
     # provider-aws-ec2.yaml
@@ -182,7 +182,7 @@ Crossplane uses **Providers** to interact with external APIs like AWS. We need t
     ```
 
 3.  **Install the AWS IAM Provider**
-    This provider manages IAM roles and policies required by the EKS cluster.
+    This provider manages IAM roles and policies required by the EKS cluster. You can find it here: [provider-aws-iam.yaml](manifests/providers/provider-aws-iam.yaml)
     <details>
     <summary><code>provider-aws-iam.yaml</code></summary>
 
@@ -233,7 +233,7 @@ Crossplane uses **Providers** to interact with external APIs like AWS. We need t
     ```
 
 6.  **Create a ProviderConfig**
-    The `ProviderConfig` tells the AWS providers how to authenticate. It references the secret we just created.
+    The `ProviderConfig` tells the AWS providers how to authenticate. It references the secret we just created. You can find it here: [provider-aws-config.yaml](manifests/providers/provider-aws-config.yaml)
     <details>
     <summary><code>provider-aws-config.yaml</code></summary>
 
@@ -273,7 +273,7 @@ We will create two levels of abstraction:
 ### Step 4.1: The Networking Layer
 
 1.  **Create the Networking XRD (`xrd-networking.yaml`)**
-    This defines an API to request a standard networking stack.
+    This defines an API to request a standard networking stack. You can find it here: [xrd-networking.yaml](manifests/apis/xrd-networking.yaml)
     <details>
     <summary><code>xrd-networking.yaml</code></summary>
 
@@ -335,7 +335,7 @@ We will create two levels of abstraction:
     ```
     
 2.  **Create the Networking Composition (`composition-networking.yaml`)**
-    This Composition implements the `XNetworking` API by defining all the underlying AWS resources (VPC, Subnets, Internet Gateway, etc.). For more details on how this works, see the [Crossplane Composition documentation](https://docs.crossplane.io/latest/concepts/composition/).
+    This Composition implements the `XNetworking` API by defining all the underlying AWS resources (VPC, Subnets, Internet Gateway, etc.). For more details on how this works, see the [Crossplane Composition documentation](https://docs.crossplane.io/latest/concepts/composition/). You can find it here: [composition-networking.yaml](manifests/apis/composition-networking.yaml)
     <details>
     <summary><code>composition-networking.yaml</code></summary>
 
@@ -699,7 +699,7 @@ We will create two levels of abstraction:
 ### Step 4.2: The EKS Cluster Layer
 
 1.  **Create the EKS Cluster XRD (`xrd-ekscluster.yaml`)**
-    This defines an API for an EKS cluster, which requires networking information (like subnet IDs) as input.
+    This defines an API for an EKS cluster, which requires networking information (like subnet IDs) as input. You can find it here: [xrd-ekscluster.yaml](manifests/apis/xrd-ekscluster.yaml)
     <details>
     <summary><code>xrd-ekscluster.yaml</code></summary>
 
@@ -781,7 +781,7 @@ We will create two levels of abstraction:
     ```
 
 2.  **Create the EKS Cluster Composition (`composition-ekscluster.yaml`)**
-    This Composition creates the EKS control plane, node groups, and associated IAM roles. It gets the network details from the `XNetworking` resource we defined earlier.
+    This Composition creates the EKS control plane, node groups, and associated IAM roles. It gets the network details from the `XNetworking` resource we defined earlier. You can find it here: [composition-ekscluster.yaml](manifests/apis/composition-ekscluster.yaml)
     <details>
     <summary><code>composition-ekscluster.yaml</code></summary>
 
@@ -1022,7 +1022,7 @@ We will create two levels of abstraction:
 Now we create the final, user-facing abstraction that combines networking and the EKS cluster into one simple API.
 
 1.  **Create the Top-Level XRD (`xrd-kubernetescluster.yaml`)**
-    This is the simplified API we will expose to users. It only requires a region and node count.
+    This is the simplified API we will expose to users. It only requires a region and node count. You can find it here: [xrd-kubernetescluster.yaml](manifests/apis/xrd-kubernetescluster.yaml)
     <details>
     <summary><code>xrd-kubernetescluster.yaml</code></summary>
 
@@ -1096,7 +1096,7 @@ Now we create the final, user-facing abstraction that combines networking and th
     ```
     
 2.  **Create the Top-Level Composition (`composition-kubernetescluster.yaml`)**
-    This Composition nests the `XNetworking` and `XEKSCluster` resources, creating the entire stack from a single user request.
+    This Composition nests the `XNetworking` and `XEKSCluster` resources, creating the entire stack from a single user request. You can find it here: [composition-kubernetescluster.yaml](manifests/apis/composition-kubernetescluster.yaml)
     <details>
     <summary><code>composition-kubernetescluster.yaml</code></summary>
 
@@ -1182,7 +1182,7 @@ Now we create the final, user-facing abstraction that combines networking and th
 Now that we have defined our custom `KubernetesCluster` API, let's use it to provision a real cluster.
 
 1.  **Create a Claim**
-    A `Claim` is a request for a resource defined by our XRD. This simple YAML is all a user needs to provision a complete EKS cluster.
+    A `Claim` is a request for a resource defined by our XRD. This simple YAML is all a user needs to provision a complete EKS cluster. You can find it here: [claim-kubernetescluster.yaml](manifests/claims/claim-kubernetescluster.yaml)
     <details>
     <summary><code>claim-kubernetescluster.yaml</code></summary>
 
@@ -1249,7 +1249,7 @@ Now that we have defined our custom `KubernetesCluster` API, let's use it to pro
 Now, let's configure kube-green to automatically scale down our cluster's node pool to save costs during inactive hours.
 
 1.  **Grant kube-green Permissions**
-    We need to give kube-green permission to modify our custom `KubernetesCluster` resources.
+    We need to give kube-green permission to modify our custom `KubernetesCluster` resources. You can find it here: [claim-kubernetescluster.yaml](manifests/kube-green/kube-green-kubernetescluster.yaml)
     <details>
     <summary><code>kube-green-kubernetescluster.yaml</code></summary>
 
@@ -1284,7 +1284,7 @@ Now, let's configure kube-green to automatically scale down our cluster's node p
     ```
 
 2.  **Create a SleepInfo Resource**
-    The `SleepInfo` resource tells kube-green when to sleep and wake up, and what to patch. In this case, we patch the `nodes.count` parameter of our `KubernetesCluster` to scale it down.
+    The `SleepInfo` resource tells kube-green when to sleep and wake up, and what to patch. In this case, we patch the `nodes.count` parameter of our `KubernetesCluster` to scale it down.       You can find it here: [sleepinfo.yaml](manifests/kube-green/sleepinfo.yaml)
     <details>
     <summary><code>sleepinfo.yaml</code></summary>
 
