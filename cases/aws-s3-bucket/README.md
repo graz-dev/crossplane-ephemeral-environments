@@ -147,7 +147,6 @@ Crossplane uses **Providers** to interact with external APIs like AWS. We need t
     <summary><code>manifests/providers/provider-aws-s3.yaml</code></summary>
 
     ```yaml
-    # provider-aws-s3.yaml
     apiVersion: pkg.crossplane.io/v1
     kind: Provider
     metadata:
@@ -191,7 +190,6 @@ Crossplane uses **Providers** to interact with external APIs like AWS. We need t
     <summary><code>manifests/providers/provider-aws-config.yaml</code></summary>
 
     ```yaml
-    # provider-aws-config.yaml
     apiVersion: aws.upbound.io/v1beta1
     kind: ProviderConfig
     metadata:
