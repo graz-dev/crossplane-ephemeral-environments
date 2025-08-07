@@ -5,12 +5,13 @@ metadata:
 spec:
   weekdays: "*"
   timeZone: "Europe/Rome"
-  sleepAt: "19:05"
-  wakeUpAt: "19:07"
+  sleepAt: "11:19" # Adjust to a few minutes from now for testing
+  wakeUpAt: "11:21" # Adjust to a few minutes from now for testing
   patches:
   - target:
-      group: platform.example.org
+      group: aws.crossplane.grazdev.io
       kind: SecureBucket
+# change with your aws account id and username below
     patch: |
       - op: replace
         path: /spec/parameters/policy
@@ -22,7 +23,7 @@ spec:
                 "Sid": "AllowAdminAccess",
                 "Effect": "Allow",
                 "Principal": {
-                  "AWS": "arn:aws:iam::<your-account-id>:user/<your-user>"
+                  "AWS": "arn:aws:iam::<your-account-id>:user/<your-username>"
                 },
                 "Action": "s3:*",
                 "Resource": [
@@ -41,7 +42,7 @@ spec:
                 ],
                 "Condition": {
                   "StringNotLike": {
-                    "aws:PrincipalArn": "arn:aws:iam::<your-account-id>:user/<your-user>"
+                    "aws:PrincipalArn": "arn:aws:iam::<your-account-id>:user/<your-username>"
                   }
                 }
               }

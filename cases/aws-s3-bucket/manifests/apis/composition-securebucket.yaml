@@ -1,12 +1,12 @@
 apiVersion: apiextensions.crossplane.io/v1
 kind: Composition
 metadata:
-  name: s3.securebucket.platform.example.org
+  name: s3.securebucket.aws.crossplane.grazdev.io
   labels:
     type: secure-s3-from-manifests
 spec:
   compositeTypeRef:
-    apiVersion: platform.example.org/v1alpha1
+    apiVersion: aws.crossplane.grazdev.io/v1alpha1
     kind: XSecureBucket
   resources:
     - name: bucket

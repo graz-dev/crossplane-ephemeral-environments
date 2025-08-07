@@ -3,7 +3,7 @@ kind: ClusterRole
 metadata:
   name: kube-green-s3-patcher
 rules:
-- apiGroups: ["platform.example.org"]
+- apiGroups: ["aws.crossplane.grazdev.io"]
   resources: ["securebuckets"]
   verbs: ["get", "list", "watch", "patch"]
 ---

@@ -1,9 +1,9 @@
 apiVersion: apiextensions.crossplane.io/v1
 kind: CompositeResourceDefinition
 metadata:
-  name: xsecurebuckets.platform.example.org
+  name: xsecurebuckets.aws.crossplane.grazdev.io
 spec:
-  group: platform.example.org
+  group: aws.crossplane.grazdev.io
   names:
     kind: XSecureBucket
     plural: xsecurebuckets

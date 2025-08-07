@@ -1,4 +1,4 @@
-apiVersion: platform.example.org/v1alpha1
+apiVersion: aws.crossplane.grazdev.io/v1alpha1
 kind: SecureBucket
 metadata:
   name: my-final-bucket-for-production
@@ -8,8 +8,9 @@ spec:
       type: secure-s3-from-manifests
   parameters:
     bucketName: "my-final-bucket-for-production-2025"
-    region: "us-east-2"
+    region: "eu-central-1"
     blockPublicPolicy: false
+    # change with your aws account id and username below
     policy: |
       {
         "Version": "2012-10-17",
@@ -18,7 +19,7 @@ spec:
             "Sid": "AllowAdminAccess",
             "Effect": "Allow",
             "Principal": {
-              "AWS": "arn:aws:iam::<your-account-id>:user/<your-user>"
+              "AWS": "arn:aws:iam::<your-account-id>:user/<your-username>"
             },
             "Action": "s3:*",
             "Resource": [

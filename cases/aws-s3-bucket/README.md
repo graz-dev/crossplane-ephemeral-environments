@@ -144,7 +144,7 @@ Crossplane uses **Providers** to interact with external APIs like AWS. We need t
 1.  **Install the AWS S3 Provider**
     This provider manages S3 resources. You can find it here: [manifests/providers/provider-aws-s3.yaml](manifests/providers/provider-aws-s3.yaml)
     <details>
-    <summary><code>provider-aws-s3.yaml</code></summary>
+    <summary><code>manifests/providers/provider-aws-s3.yaml</code></summary>
 
     ```yaml
     # provider-aws-s3.yaml
@@ -188,7 +188,7 @@ Crossplane uses **Providers** to interact with external APIs like AWS. We need t
 4.  **Create a ProviderConfig**
     The `ProviderConfig` tells the AWS provider how to authenticate. It references the secret we just created. You can find it here: [manifests/providers/provider-aws-config.yaml](manifests/providers/provider-aws-config.yaml)
     <details>
-    <summary><code>provider-aws-config.yaml</code></summary>
+    <summary><code>manifests/providers/provider-aws-config.yaml</code></summary>
 
     ```yaml
     # provider-aws-config.yaml
@@ -221,15 +221,15 @@ This is where the magic of Crossplane shines. We will define our own custom API 
 1.  **Create the SecureBucket XRD (`xrd-securebucket.yaml`)**
     This defines an API to request a secure S3 bucket. You can find it here: [manifests/apis/xrd-securebucket.yaml](manifests/apis/xrd-securebucket.yaml)
     <details>
-    <summary><code>xrd-securebucket.yaml</code></summary>
+    <summary><code>manifests/apis/xrd-securebucket.yaml</code></summary>
 
     ```yaml
     apiVersion: apiextensions.crossplane.io/v1
     kind: CompositeResourceDefinition
     metadata:
-      name: xsecurebuckets.platform.example.org
+      name: xsecurebuckets.aws.crossplane.grazdev.io
     spec:
-      group: platform.example.org
+      group: aws.crossplane.grazdev.io
       names:
         kind: XSecureBucket
         plural: xsecurebuckets
@@ -277,18 +277,18 @@ This is where the magic of Crossplane shines. We will define our own custom API 
 2.  **Create the SecureBucket Composition (`composition-securebucket.yaml`)**
     This Composition implements the `XSecureBucket` API by defining the underlying AWS S3 resources. For more details on how this works, see the [Crossplane Composition documentation](https://docs.crossplane.io/latest/concepts/composition/). You can find it here: [manifests/apis/composition-securebucket.yaml](manifests/apis/composition-securebucket.yaml)
     <details>
-    <summary><code>composition-securebucket.yaml</code></summary>
+    <summary><code>manifests/apis/composition-securebucket.yaml</code></summary>
 
     ```yaml
     apiVersion: apiextensions.crossplane.io/v1
     kind: Composition
     metadata:
-      name: s3.securebucket.platform.example.org
+      name: s3.securebucket.aws.crossplane.grazdev.io
       labels:
         type: secure-s3-from-manifests
     spec:
       compositeTypeRef:
-        apiVersion: platform.example.org/v1alpha1
+        apiVersion: aws.crossplane.grazdev.io/v1alpha1
         kind: XSecureBucket
       resources:
         - name: bucket
@@ -358,12 +358,12 @@ This is where the magic of Crossplane shines. We will define our own custom API 
 Now that we have defined our custom `SecureBucket` API, let's use it to provision a real bucket.
 
 1.  **Create a Claim**
-    A `Claim` is a request for a resource defined by our XRD. This simple YAML is all a user needs to provision a complete S3 bucket with a policy. You can find it here: [manifests/claims/my-new-bucket-claim.yaml](manifests/claims/my-new-bucket-claim.yaml)
+    A `Claim` is a request for a resource defined by our XRD. This simple YAML is all a user needs to provision a complete S3 bucket with a policy. You can find it here: [manifests/claims/claim-securebucket.yaml](manifests/claims/claim-securebucket.yaml)
     <details>
-    <summary><code>my-new-bucket-claim.yaml</code></summary>
+    <summary><code>manifests/claims/claim-securebucket.yaml</code></summary>
 
     ```yaml
-    apiVersion: platform.example.org/v1alpha1
+    apiVersion: aws.crossplane.grazdev.io/v1alpha1
     kind: SecureBucket
     metadata:
       name: my-final-bucket-for-production
@@ -373,8 +373,9 @@ Now that we have defined our custom `SecureBucket` API, let's use it to provisio
           type: secure-s3-from-manifests
       parameters:
         bucketName: "my-final-bucket-for-production-2025"
-        region: "us-east-2"
+        region: "us-central-1"
         blockPublicPolicy: false
+        # change with your aws account id and username below
         policy: |
           {
             "Version": "2012-10-17",
@@ -397,7 +398,7 @@ Now that we have defined our custom `SecureBucket` API, let's use it to provisio
     </details>
     
     ```bash
-    kubectl apply -f manifests/claims/my-new-bucket-claim.yaml
+    kubectl apply -f manifests/claims/claim-securebucket.yaml
     ```
 
 2.  **Monitor Provisioning**
@@ -425,9 +426,9 @@ Now that we have defined our custom `SecureBucket` API, let's use it to provisio
 Now, let's configure kube-green to automatically update our bucket's policy to restrict access during inactive hours.
 
 1.  **Grant kube-green Permissions**
-    We need to give kube-green permission to modify our custom `SecureBucket` resources. You can find it here: [manifests/kube-green/kube-green-s3-bucket.yaml](manifests/kube-green/kube-green-s3-bucket.yaml)
+    We need to give kube-green permission to modify our custom `SecureBucket` resources. You can find it here: [manifests/kube-green/kube-green-securebucket.yaml](manifests/kube-green/kube-green-securebucket.yaml)
     <details>
-    <summary><code>kube-green-s3-bucket.yaml</code></summary>
+    <summary><code>manifests/kube-green/kube-green-securebucket.yaml</code></summary>
 
     ```yaml
     apiVersion: rbac.authorization.k8s.io/v1
@@ -435,7 +436,7 @@ Now, let's configure kube-green to automatically update our bucket's policy to r
     metadata:
       name: kube-green-s3-patcher
     rules:
-    - apiGroups: ["platform.example.org"]
+    - apiGroups: ["aws.crossplane.grazdev.io"]
       resources: ["securebuckets"]
       verbs: ["get", "list", "watch", "patch"]
     ---
@@ -455,13 +456,13 @@ Now, let's configure kube-green to automatically update our bucket's policy to r
     </details>
     
     ```bash
-    kubectl apply -f manifests/kube-green/kube-green-s3-bucket.yaml
+    kubectl apply -f manifests/kube-green/kube-green-securebucket.yaml
     ```
 
 2.  **Create a SleepInfo Resource**
-    The `SleepInfo` resource tells kube-green when to sleep and wake up, and what to patch. In this case, we patch the `policy` parameter of our `SecureBucket` to deny all access except for a specific IAM user. You can find it here: [manifests/kube-green/s3-lock-bucket-sleep-info.yaml](manifests/kube-green/s3-lock-bucket-sleep-info.yaml)
+    The `SleepInfo` resource tells kube-green when to sleep and wake up, and what to patch. In this case, we patch the `policy` parameter of our `SecureBucket` to deny all access except for a specific IAM user. You can find it here: [manifests/kube-green/sleepinfo.yaml](manifests/kube-green/sleepinfo.yaml)
     <details>
-    <summary><code>s3-lock-bucket-sleep-info.yaml</code></summary>
+    <summary><code>manifests/kube-green/sleepinfo.yaml</code></summary>
 
     ```yaml
     apiVersion: kube-green.com/v1alpha1
@@ -471,12 +472,13 @@ Now, let's configure kube-green to automatically update our bucket's policy to r
     spec:
       weekdays: "*"
       timeZone: "Europe/Rome"
-      sleepAt: "19:05"
-      wakeUpAt: "19:07"
+      sleepAt: "19:05" # Adjust to a few minutes from now for testing
+      wakeUpAt: "19:07" # Adjust to a few minutes from now for testing
       patches:
       - target:
-          group: platform.example.org
+          group: aws.crossplane.grazdev.io
           kind: SecureBucket
+        # change with your aws account id and username below
         patch: |
           - op: replace
             path: /spec/parameters/policy
@@ -517,7 +519,7 @@ Now, let's configure kube-green to automatically update our bucket's policy to r
     </details>
     
     ```bash
-    kubectl apply -f manifests/kube-green/s3-lock-bucket-sleep-info.yaml
+    kubectl apply -f manifests/kube-green/sleepinfo.yaml
     ```
 
 3.  **Verify Hibernation (Sleep)**
