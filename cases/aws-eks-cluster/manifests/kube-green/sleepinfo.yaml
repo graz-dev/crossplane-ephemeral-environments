@@ -6,8 +6,8 @@ metadata:
 spec:
   weekdays: "*"
   timeZone: "Europe/Rome"
-  sleepAt: "21:58"
-  wakeUpAt: "22:10"
+  sleepAt: "10:28" # Adjust to a few minutes from now for testing
+  wakeUpAt: "10:35" # Adjust to a few minutes from now for testing
   patches:
   - target:
       group: k8s.crossplane.grazdev.io
