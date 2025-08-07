@@ -142,12 +142,11 @@ With our local cluster ready, it's time to install the core components: Crosspla
 Crossplane uses **Providers** to interact with external APIs like Kubernetes. We need to install and configure the specific providers for Kubernetes.
 
 1.  **Install the Kubernetes Provider **
-    This provider manages Kubernetes resources. You can find it here: [provider-kubernetes.yaml](manifests/providers/provider-kubernetes.yaml)
+    This provider manages Kubernetes resources. You can find it here: [manifests/providers/provider-kubernetes.yaml](manifests/providers/provider-kubernetes.yaml)
     <details>
-    <summary><code>provider-kubernetes.yaml</code></summary>
+    <summary><code>manifests/providers/provider-kubernetes.yaml</code></summary>
 
     ```yaml
-    # provider-kubernetes.yaml
     apiVersion: pkg.crossplane.io/v1
     kind: Provider
     metadata:
@@ -158,16 +157,15 @@ Crossplane uses **Providers** to interact with external APIs like Kubernetes. We
     </details>
 
     ```bash
-    kubectl apply -f provider-kubernetes.yaml
+    kubectl apply -f manifests/providers/provider-kubernetes.yaml
     ```
 
 2.  **Create a ProviderConfig**
-    The `ProviderConfig` tells the Kubernetes providers how to authenticate. It references the secret we just created. You can find it here: [provider-kubernetes-config.yaml](manifests/providers/provider-kubernetes-config.yaml)
+    The `ProviderConfig` tells the Kubernetes providers how to authenticate. It references the secret we just created. You can find it here: [manifests/providers/provider-kubernetes-config.yaml](manifests/providers/provider-kubernetes-config.yaml)
     <details>
-    <summary><code>provider-kubernetes-config.yaml</code></summary>
+    <summary><code>manifests/providers/provider-kubernetes-config.yaml</code></summary>
 
     ```yaml
-    # provider-kubernetes-config.yaml
     apiVersion: kubernetes.crossplane.io/v1alpha1
     kind: ProviderConfig
     metadata:
@@ -179,7 +177,7 @@ Crossplane uses **Providers** to interact with external APIs like Kubernetes. We
     </details>
 
     ```bash
-    kubectl apply -f provider-kubernetes-config.yaml
+    kubectl apply -f manifests/providers/provider-kubernetes-config.yaml
     ```
 
 3.  **Install the CloudNativePG Operator**
@@ -210,18 +208,17 @@ This is where the magic of Crossplane shines. We will define our own custom API 
 - **Composition:** This maps our custom API to the actual cloud resources that need to be created.
 
 1.  **Create the PostgresCluster XRD (`xrd-postgrescluster.yaml`)**
-    This defines an API to request a standard networking stack. You can find it here: [xrd-postgrescluster.yaml](manifests/apis/xrd-postgrescluster.yaml)
+    This defines an API to request a standard networking stack. You can find it here: [manifests/apis/xrd-postgrescluster.yaml](manifests/apis/xrd-postgrescluster.yaml)
     <details>
-    <summary><code>xrd-postgrescluster.yaml</code></summary>
+    <summary><code>manifests/apis/xrd-postgrescluster.yaml</code></summary>
 
     ```yaml
-    # xrd-postgrescluster.yaml
     apiVersion: apiextensions.crossplane.io/v1
     kind: CompositeResourceDefinition
     metadata:
-      name: xpostgresclusters.demo.crossplane.io
+      name: xpostgresclusters.k8s.crossplane.grazdev.io
     spec:
-      group: demo.crossplane.io
+      group: k8s.crossplane.grazdev.io
       names:
         kind: XPostgresCluster
         plural: xpostgresclusters
@@ -250,23 +247,22 @@ This is where the magic of Crossplane shines. We will define our own custom API 
     </details>
     
     ```bash
-    kubectl apply -f xrd-postgrescluster.yaml
+    kubectl apply -f manifests/apis/xrd-postgrescluster.yaml
     ```
     
 2.  **Create the PostgresCluster Composition (`composition-postgrescluster.yaml`)**
-    This `Composition` map the abstract API to an `Object` resource of the crossplane kubernetes-provider that defines a CloudNativePG `Cluster`. You can find it here: [composition-postgrescluster.yaml](manifests/apis/composition-postgrescluster.yaml)
+    This `Composition` map the abstract API to an `Object` resource of the crossplane kubernetes-provider that defines a CloudNativePG `Cluster`. You can find it here: [manifests/apis/composition-postgrescluster.yaml](manifests/apis/composition-postgrescluster.yaml)
     <details>
-    <summary><code>composition-postgrescluster.yaml</code></summary>
+    <summary><code>manifests/apis/composition-postgrescluster.yaml</code></summary>
 
     ```yaml
-    # composition-postgrescluster.yaml
     apiVersion: apiextensions.crossplane.io/v1
     kind: Composition
     metadata:
-      name: postgrescluster.demo.crossplane.io
+      name: postgrescluster.k8s.crossplane.grazdev.io
     spec:
       compositeTypeRef:
-        apiVersion: demo.crossplane.io/v1alpha1
+        apiVersion: k8s.crossplane.grazdev.io/v1alpha1
         kind: XPostgresCluster
       resources:
       - name: postgres-cluster-object
@@ -304,7 +300,7 @@ This is where the magic of Crossplane shines. We will define our own custom API 
     </details>
     
     ```bash
-    kubectl apply -f composition-postgrescluster.yaml
+    kubectl apply -f manifests/apis/composition-postgrescluster.yaml
     ```
 
 3.  **Give the permission to the kubernetes-provider service account to act as a cluster-admin**
@@ -326,13 +322,12 @@ This is where the magic of Crossplane shines. We will define our own custom API 
 Now that we have defined our custom `PostgresCluster` API, let's use it to provision a real cluster.
 
 1.  **Create a Claim**
-    A `Claim` is a request for a resource defined by our XRD. This simple YAML is all a user needs to provision a complete PostgreSQL cluster. You can find it here: [my-postgres-db.yaml](manifests/claims/my-postgres-db.yaml)
+    A `Claim` is a request for a resource defined by our XRD. This simple YAML is all a user needs to provision a complete PostgreSQL cluster. You can find it here: [manifests/claims/claim-postgrescluster.yaml](manifests/claims/claim-postgrescluster.yaml)
     <details>
-    <summary><code>my-postgres-db.yaml</code></summary>
+    <summary><code>manifests/claims/claim-postgrescluster.yaml</code></summary>
 
     ```yaml
-    # my-postgres-db.yaml
-    apiVersion: demo.crossplane.io/v1alpha1
+    apiVersion: k8s.crossplane.grazdev.io/v1alpha1
     kind: XPostgresCluster
     metadata:
       name: my-production-db
@@ -344,7 +339,7 @@ Now that we have defined our custom `PostgresCluster` API, let's use it to provi
     </details>
     
     ```bash
-    kubectl apply -f my-postgres-db.yaml
+    kubectl apply -f manifests/claims/claim-postgrescluster.yaml
     ```
 
 2.  **Monitor Provisioning**
@@ -357,15 +352,15 @@ Now that we have defined our custom `PostgresCluster` API, let's use it to provi
     Wait until `SYNCED` and `READY` are both `True`.
 
     ```console
-    NAME               SYNCED   READY   COMPOSITION                          AGE
-    my-production-db   True     True    postgrescluster.demo.crossplane.io   53s
+    NAME               SYNCED   READY   COMPOSITION                                 AGE
+    my-production-db   True     True    postgrescluster.k8s.crossplane.grazdev.io   3m50s
     ```
 
 3.  **Access the New PostgreSQL Cluster**
     Once ready, you can check the status of the CloudNativePG cluster:
     
     ```bash
-    kubectl get cluster -n default my-production-db
+    kubectl get clusters.postgresql.cnpg.io -n default my-production-db
     ```
 
     You should see the cluster in a healthy state:
@@ -395,19 +390,18 @@ Now that we have defined our custom `PostgresCluster` API, let's use it to provi
 Now, let's configure kube-green to automatically scale down our cluster's node pool to save costs during inactive hours.
 
 1.  **Grant kube-green Permissions**
-    We need to give kube-green permission to modify our custom `XPostgresCluster` resources. You can find it here: [kube-green-rbac-for-postgres.yaml](manifests/kube-green/kube-green-rbac-for-postgres.yaml)
+    We need to give kube-green permission to modify our custom `XPostgresCluster` resources. You can find it here: [manifests/kube-green/kube-green-postgrescluster.yaml](manifests/kube-green/kube-green-postgrescluster.yaml)
     <details>
-    <summary><code>kube-green-rbac-for-postgres.yaml</code></summary>
+    <summary><code>manifests/kube-green/kube-green-postgrescluster.yaml</code></summary>
 
     ```yaml
-    # kube-green-rbac-for-postgres.yaml
     apiVersion: rbac.authorization.k8s.io/v1
     kind: ClusterRole
     metadata:
       name: kube-green-xpostgrescluster-patcher
     rules:
     - apiGroups:
-      - "demo.crossplane.io"
+      - "k8s.crossplane.grazdev.io"
       resources:
       - "xpostgresclusters"
       verbs:
@@ -432,16 +426,15 @@ Now, let's configure kube-green to automatically scale down our cluster's node p
     </details>
     
     ```bash
-    kubectl apply -f kube-green-rbac-for-postgres.yaml
+    kubectl apply -f manifests/kube-green/kube-green-postgrescluster.yaml
     ```
 
 2.  **Create a SleepInfo Resource**
-    The `SleepInfo` resource tells kube-green when to sleep and wake up, and what to patch. In this case, we patch the `hibernation` parameter of our `XPostgresCluster` to scale it down. You can find it here: [schedule-sleep-postgres.yaml](manifests/kube-green/schedule-sleep-postgres.yaml)
+    The `SleepInfo` resource tells kube-green when to sleep and wake up, and what to patch. In this case, we patch the `hibernation` parameter of our `XPostgresCluster` to scale it down. You can find it here: [manifests/kube-green/sleepinfo.yaml](manifests/kube-green/sleepinfo.yaml)
     <details>
-    <summary><code>schedule-sleep-postgres.yaml</code></summary>
+    <summary><code>manifests/kube-green/sleepinfo.yaml</code></summary>
 
     ```yaml
-    # schedule-sleep-postgres.yaml
     apiVersion: kube-green.com/v1alpha1
     kind: SleepInfo
     metadata:
@@ -449,11 +442,12 @@ Now, let's configure kube-green to automatically scale down our cluster's node p
       namespace: default
     spec:
       weekdays: "*"
-      sleepAt: "18:47"
-      wakeUpAt: "18:49"
+      timeZone: "Europe/Rome"
+      sleepAt: "18:47" # Adjust to a few minutes from now for testing
+      wakeUpAt: "18:49" # Adjust to a few minutes from now for testing
       patches:
       - target:
-          group: demo.crossplane.io
+          group: k8s.crossplane.grazdev.io
           kind: XPostgresCluster
         patch: |
           - op: replace
@@ -463,7 +457,7 @@ Now, let's configure kube-green to automatically scale down our cluster's node p
     </details>
     
     ```bash
-    kubectl apply -f schedule-sleep-postgres.yaml
+    kubectl apply -f manifests/kube-green/sleepinfo.yaml
     ```
 
 3.  **Verify Hibernation (Sleep)**

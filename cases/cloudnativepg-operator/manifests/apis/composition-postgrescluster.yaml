@@ -1,11 +1,10 @@
-# composition-postgrescluster.yaml
 apiVersion: apiextensions.crossplane.io/v1
 kind: Composition
 metadata:
-  name: postgrescluster.demo.crossplane.io
+  name: postgrescluster.k8s.crossplane.grazdev.io
 spec:
   compositeTypeRef:
-    apiVersion: demo.crossplane.io/v1alpha1
+    apiVersion: k8s.crossplane.grazdev.io/v1alpha1
     kind: XPostgresCluster
   resources:
   - name: postgres-cluster-object

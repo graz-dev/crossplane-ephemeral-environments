@@ -1,5 +1,4 @@
-# my-postgres-db.yaml
-apiVersion: demo.crossplane.io/v1alpha1
+apiVersion: k8s.crossplane.grazdev.io/v1alpha1
 kind: XPostgresCluster
 metadata:
   name: my-production-db

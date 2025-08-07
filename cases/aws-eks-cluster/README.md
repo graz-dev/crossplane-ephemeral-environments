@@ -147,7 +147,6 @@ Crossplane uses **Providers** to interact with external APIs like AWS. We need t
     <summary><code>manifests/providers/provider-aws-eks.yaml</code></summary>
 
     ```yaml
-    # provider-aws-eks.yaml
     apiVersion: pkg.crossplane.io/v1
     kind: Provider
     metadata:
@@ -167,7 +166,6 @@ Crossplane uses **Providers** to interact with external APIs like AWS. We need t
     <summary><code>manifests/providers/provider-aws-ec2.yaml</code></summary>
 
     ```yaml
-    # provider-aws-ec2.yaml
     apiVersion: pkg.crossplane.io/v1
     kind: Provider
     metadata:
@@ -187,7 +185,6 @@ Crossplane uses **Providers** to interact with external APIs like AWS. We need t
     <summary><code>manifests/providers/provider-aws-iam.yaml</code></summary>
 
     ```yaml
-    # provider-aws-iam.yaml
     apiVersion: pkg.crossplane.io/v1
     kind: Provider
     metadata:
@@ -238,7 +235,6 @@ Crossplane uses **Providers** to interact with external APIs like AWS. We need t
     <summary><code>manifests/providers/provider-aws-config.yaml</code></summary>
 
     ```yaml
-    # provider-aws-config.yaml
     apiVersion: aws.upbound.io/v1beta1
     kind: ProviderConfig
     metadata:
@@ -278,7 +274,6 @@ We will create two levels of abstraction:
     <summary><code>manifests/apis/xrd-networking.yaml</code></summary>
 
     ```yaml
-    # xrd-networking.yaml
     apiVersion: apiextensions.crossplane.io/v1
     kind: CompositeResourceDefinition
     metadata:
@@ -340,7 +335,6 @@ We will create two levels of abstraction:
     <summary><code>manifests/apis/composition-networking.yaml</code></summary>
 
     ```yaml
-    # composition-networking.yaml
     apiVersion: apiextensions.crossplane.io/v1
     kind: Composition
     metadata:
@@ -704,7 +698,6 @@ We will create two levels of abstraction:
     <summary><code>manifests/apis/xrd-ekscluster.yaml</code></summary>
 
     ```yaml
-    # xrd-ekscluster.yaml
     apiVersion: apiextensions.crossplane.io/v1
     kind: CompositeResourceDefinition
     metadata:
@@ -786,7 +779,6 @@ We will create two levels of abstraction:
     <summary><code>manifests/apis/composition-ekscluster.yaml</code></summary>
 
     ```yaml
-    # composition-ekscluster.yaml
     apiVersion: apiextensions.crossplane.io/v1
     kind: Composition
     metadata:
@@ -1027,7 +1019,6 @@ Now we create the final, user-facing abstraction that combines networking and th
     <summary><code>manifests/apis/xrd-kubernetescluster.yaml</code></summary>
 
     ```yaml
-    # xrd-kubernetescluster.yaml
     apiVersion: apiextensions.crossplane.io/v1
     kind: CompositeResourceDefinition
     metadata:
@@ -1101,7 +1092,6 @@ Now we create the final, user-facing abstraction that combines networking and th
     <summary><code>manifests/apis/composition-kubernetescluster.yaml</code></summary>
 
     ```yaml
-    # composition-kubernetescluster.yaml
     apiVersion: apiextensions.crossplane.io/v1
     kind: Composition
     metadata:
@@ -1187,7 +1177,6 @@ Now that we have defined our custom `KubernetesCluster` API, let's use it to pro
     <summary><code>manifests/claims/claim-kubernetescluster.yaml</code></summary>
 
     ```yaml
-    # claim-kubernetescluster.yaml
     apiVersion: k8s.crossplane.grazdev.io/v1alpha1
     kind: KubernetesCluster
     metadata:
@@ -1254,7 +1243,6 @@ Now, let's configure kube-green to automatically scale down our cluster's node p
     <summary><code>manifests/kube-green/kube-green-kubernetescluster.yaml</code></summary>
 
     ```yaml
-    # kube-green-kubernetescluster.yaml
     apiVersion: rbac.authorization.k8s.io/v1
     kind: ClusterRole
     metadata:
@@ -1289,7 +1277,6 @@ Now, let's configure kube-green to automatically scale down our cluster's node p
     <summary><code>manifests/kube-green/sleepinfo.yaml</code></summary>
 
     ```yaml
-    # sleepinfo.yaml
     apiVersion: kube-green.com/v1alpha1
     kind: SleepInfo
     metadata:

@@ -1,11 +1,10 @@
-# kube-green-rbac-for-postgres.yaml
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   name: kube-green-xpostgrescluster-patcher
 rules:
 - apiGroups:
-  - "demo.crossplane.io"
+  - "k8s.crossplane.grazdev.io"
   resources:
   - "xpostgresclusters"
   verbs:

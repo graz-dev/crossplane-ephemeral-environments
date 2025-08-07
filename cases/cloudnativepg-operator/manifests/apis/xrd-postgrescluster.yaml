@@ -1,10 +1,9 @@
-# xrd-postgrescluster.yaml
 apiVersion: apiextensions.crossplane.io/v1
 kind: CompositeResourceDefinition
 metadata:
-  name: xpostgresclusters.demo.crossplane.io
+  name: xpostgresclusters.k8s.crossplane.grazdev.io
 spec:
-  group: demo.crossplane.io
+  group: k8s.crossplane.grazdev.io
   names:
     kind: XPostgresCluster
     plural: xpostgresclusters
