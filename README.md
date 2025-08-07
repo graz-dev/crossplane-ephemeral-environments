@@ -1,5 +1,9 @@
 # Ephemeral Environments with Crossplane and kube-green
 
+![Crossplane Badge](https://img.shields.io/badge/tool-crossplane-blue) ![kube-green Badge](https://img.shields.io/badge/tool-kube_green-blue) </br>
+![AWS EKS](https://img.shields.io/badge/resource-AWS_EKS_Cluster-blue) ![AWS S3](https://img.shields.io/badge/resource-AWS_S3_Bucket-blue) ![Cloudnative PG](https://img.shields.io/badge/resource-CloudNativePG_Cluster-blue)
+
+
 This repository contains a collection of hands-on tutorials demonstrating how to create and manage ephemeral environments using [Crossplane](https://www.crossplane.io/) for infrastructure provisioning and [kube-green](https://kube-green.dev/) for lifecycle management (hibernation).
 
 The main goal is to showcase how to build self-service, on-demand infrastructure that can be automatically scaled down or put to sleep during inactive hours to save resources and costs. This is a powerful pattern for development, testing, and staging environments.
